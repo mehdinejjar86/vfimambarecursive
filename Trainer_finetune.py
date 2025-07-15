@@ -33,7 +33,13 @@ class Model:
         self.net.eval()
 
     def device(self):
-        self.net.to(torch.device("cuda"))
+        if torch.cuda.is_available():
+            device = torch.device('cuda')
+        elif torch.backends.mps.is_available():
+            device = torch.device('mps')
+        else:
+            device = torch.device('cpu')
+        self.net.to(device)
 
     def load_model(self, name=None, rank=0, real=False):
         if rank <= 0 :

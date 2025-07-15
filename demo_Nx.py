@@ -54,11 +54,27 @@ def _recursive_generator(frame1, frame2, down_scale, num_recursions, index):
 
 print(f'========================= Start Generating=========================')
 
-I0 = cv2.imread(f'example/im1.png')
-I2 = cv2.imread(f'example/im2.png') 
+I0 = cv2.imread(f'example/im1.png', cv2.IMREAD_UNCHANGED)
+I2 = cv2.imread(f'example/im2.png', cv2.IMREAD_UNCHANGED) 
 
-I0_ = (torch.tensor(I0.transpose(2, 0, 1)).cuda() / 255.).unsqueeze(0)
-I2_ = (torch.tensor(I2.transpose(2, 0, 1)).cuda() / 255.).unsqueeze(0)
+# if grayscale convert to BGR
+if len(I0.shape) == 2:
+    I0 = cv2.cvtColor(I0, cv2.COLOR_GRAY2BGR)
+    I2 = cv2.cvtColor(I2, cv2.COLOR_GRAY2BGR)
+
+# check dtype
+Is_dtype = I0.dtype
+
+if Is_dtype == np.uint8:
+    max_value = 255
+elif Is_dtype == np.uint16:
+    max_value = 65535
+else:
+    max_value = 1
+
+
+I0_ = (torch.tensor(I0.transpose(2, 0, 1)).to(device) / max_value).unsqueeze(0)
+I2_ = (torch.tensor(I2.transpose(2, 0, 1)).to(device) / max_value).unsqueeze(0)
 
 down_scale = 1.0
 
@@ -72,7 +88,7 @@ ans = []
 
 for pred, _ in frames:
     pred = pred[0]
-    pred = (padder.unpad(pred).detach().cpu().numpy().transpose(1, 2, 0) * 255.0).astype(np.uint8)
+    pred = (padder.unpad(pred).detach().cpu().numpy().transpose(1, 2, 0) * max_value).astype(Is_dtype)
     ans.append(pred)
 
 mimsave(f'example/out_{args.n}x.gif', [x[:, :, ::-1] for x in ans], fps=8)
