@@ -46,7 +46,7 @@ class Model:
             if name is None:
                 name = self.name
             print(f"loading {name} ckpt")
-            self.net.load_state_dict(convert(torch.load(f'ckpt/{name}.pkl')), strict=True)
+            self.net.load_state_dict(convert(torch.load(f'ckpt/{name}.pkl', weights_only=True)), strict=True)
 
     @classmethod
     def from_pretrained(cls, model_id, local_rank=-1):
