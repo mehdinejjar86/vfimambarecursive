@@ -1,3 +1,7 @@
 *ckpt*
 *.pkl
 *pycache*
+*E30*
+*confocal*
+*output*
+*test*

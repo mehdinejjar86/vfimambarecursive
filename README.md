@@ -1,26 +1,8 @@
-# [NeurIPS 2024] VFIMamba: Video Frame Interpolation with State Space Models [arxiv](https://arxiv.org/abs/2407.02315)
+# VFIMAMBA RECURSIVE
 
-> [**VFIMamba: Video Frame Interpolation with State Space Models**](https://arxiv.org/abs/2407.02315)<br> > [Guozhen Zhang](https://github.com/GuozhenZhang1999), [Chunxu Liu](https://scholar.google.com.hk/citations?hl=zh-CN&view_op=list_works&gmla=AKKJWFe0ZBvfA_4yxMRe8BW79xNafjCwXtxN10finOaqV1EREnZGxSX6DbpZelBUJD0GZmp5S7unCf76xrgOfnS6SVA&user=dvUKnKEAAAAJ), [Yutao Cui](https://scholar.google.com.hk/citations?user=TSMchWcAAAAJ&hl=zh-CN), Xiaotong Zhao, [Kai Ma](https://scholar.google.com.hk/citations?user=FSSXeyAAAAAJ&hl=zh-CN), [Limin Wang](http://wanglimin.github.io/)
+Coming Soon
 
-<div align="center">
-  <img src="figs/main0.png" width="1000"/>
-</div>
-
-## :boom: News
-
-- **[2024.09.26] Accepted by NeurIPS 2024!**
-- **[2024.09.3] Support for directly importing model weights from HuggingFace. Thanks to the HuggingFace team for their efforts!**
-- **[2024.07.3] Demo and evaluation codes released.**
-
-## :satisfied: HighLights
-
-In this work, we have introduced VFIMamba, the first approach to adapt the SSM model to the video frame interpolation task. We devise the Mixed-SSM Block (MSB) for efficient inter-frame modeling using S6. We also explore various rearrangement methods to convert two frames into a sequence, discovering that interleaved rearrangement is more suitable for VFI tasks. Additionally, we propose a curriculum learning strategy to further leverage the potential of the S6 model. Experimental results demonstrate that VFIMamba achieves the state-of-the-art performance across various datasets, in particular highlighting the potential of the SSM model for VFI tasks with high resolution.
-
-<div align="center">
-  <img src=figs/main.png width=800 />
-</div>
-
-## :two_hearts:Installation
+## Instalation
 
 ```bash
 pip install torch torchvision torchaudio
@@ -37,33 +19,13 @@ pip install opencv-python imageio timm
 We provide two models, an efficient version (VFIMamba-S) and a stronger one (VFIMamba).
 You can choose what you need by changing the parameter `model`.
 
-### Hugging Face Demo
-
-For Hugging Face demo, please refer to [the code here](https://github.com/MCG-NJU/VFIMamba/blob/main/hf_demo_2x.py).
-
-```bash
-python hf_demo_2x.py --model **model[VFIMamba_S/VFIMamba]**      # for 2x interpolation
-```
-
 ### Manually Load
 
 ```shell
-python demo_2x.py  --model **model[VFIMamba_S/VFIMamba]**      # for 2x interpolation
-python demo_Nx.py --n 8 --model **model[VFIMamba_S/VFIMamba]** # for 8x interpolation
+python inference_img.py --n 8 --input imgs/pth --model **model[VFIMamba_S/VFIMamba]** # for 8x interpolation
 ```
 
-By running above commands with model VFIMamba, you should get the follow examples by default:
-
-<p float="left">
-  <img src=figs/out_2x.gif width=340 />
-  <img src=figs/out_8x.gif width=340 /> 
-</p>
-
-You can also use the `scale` parameter to improve performance at higher resolutions; We will downsample to `scale`\*shape to predict the optical flow and then resize to the original size to perform the other operations. We recommend setting the `scale` to 0.5 for 2K frames and 0.25 for 4K frames.
-
-```shell
-python demo_2x.py  --model VFIMamba --scale 0.5 # for 2K inputs with VFIMamba
-```
+Images should be named in numerical order: 0.png 8.png etc (see example folder)
 
 ## :runner: Evaluation
 
